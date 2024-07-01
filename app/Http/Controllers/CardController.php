@@ -19,8 +19,6 @@ class CardController extends Controller
         return $this->repo->all();
     }
 
-
-
     public function cardAdd(Request $req){
         $req->validate([
             "title" => "required|min:8|max:80",
@@ -28,14 +26,36 @@ class CardController extends Controller
             "cardId" => "required|integer",
         ], $this->repo->valError());
 
-        Card::create([
-            "title" => $req->title,
-            "description" => $req->description,
-            "cardId" => $req->cardId,
-        ]);
 
+        $status = $this->repo->cardAdd($req->all());
 
-        return response()->json("Başarıyla card eklendi.");
+        return [
+            "message" => "Başarıyla eklendi.",
+            "status" => $status
+        ];
 
     }    
+
+    public function cardDelete($id){  
+        $this->repo->cardDelete($id);
+    }
+
+    public function cardUpdate(Request $req){
+        $req->validate([
+            "id" => "required|exists:card,id",
+            "title" => "required|min:8|max:80",
+            "description" => "required",
+            "cardId" => "required|integer",
+        ], $this->repo->valError());
+
+
+        $this->repo->cardUpdate($req->all(), $req->id);
+
+        return response()->json("Başarıyla update ettin.", 200);
+    }
+
+    public function cardFirstGet($id){
+        return Card::whereId($id)->first();
+    }
+    
 }

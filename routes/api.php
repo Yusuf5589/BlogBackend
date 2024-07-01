@@ -18,6 +18,9 @@ Route::post('/login', [LoginController::class, "login"]);
 Route::middleware("auth:sanctum")->group(function () {
     Route::post('/cardadd', [CardController::class, "cardAdd"]);
     Route::get('/cardgetall', [CardController::class, "cardGetAll"]);
+    Route::get('/carddelete/{id}', [CardController::class, "cardDelete"]);
+    Route::get('/cardget/{id}', [CardController::class, "cardFirstGet"]);
+    Route::post('/cardupdate', [CardController::class, "cardUpdate"]);
 });
 
 

@@ -20,12 +20,8 @@ class RegisterController extends Controller
             "password" => "required|min:8|max:20",
         ], $this->repo->valError());
 
-
-        User::create([
-            "name" => $req->name,
-            "password" => $req->password,
-        ], $this->valError());
-
+        $this->repo->register($req->all());
+        
         return response()->json($req->name." başarıyla kayıt oldun.", 200);
     }
 }
