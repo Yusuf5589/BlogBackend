@@ -6,10 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Repositories\UserRepository;
 
-
-class LoginController extends Controller
+class UserController extends Controller
 {
-
     protected $repo;
 
     public function __construct(UserRepository $repo){
@@ -40,5 +38,17 @@ class LoginController extends Controller
         else if($user->password != $req->password){
             return response()->json("Şifren yanlış.");
         }
+    }
+
+    public function register(Request $req){
+
+        $req->validate([
+            "name" => "required|min:8|max:20|unique:user,name",
+            "password" => "required|min:8|max:20",
+        ], $this->repo->valError());
+
+        $this->repo->register($req->all());
+        
+        return response()->json($req->name." başarıyla kayıt oldun.", 200);
     }
 }

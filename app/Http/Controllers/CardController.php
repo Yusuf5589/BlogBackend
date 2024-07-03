@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Card;
 use App\Repositories\UserRepository;
+use Illuminate\Support\Facades\Cache;
 
 class CardController extends Controller
 {
@@ -17,6 +18,10 @@ class CardController extends Controller
 
     public function cardGetAll(){
         return $this->repo->all();
+    }
+
+    public function cachePut(){
+        return $this->repo->cachePut();
     }
 
     public function cardAdd(Request $req){
@@ -54,8 +59,11 @@ class CardController extends Controller
         return response()->json("Başarıyla update ettin.", 200);
     }
 
-    public function cardFirstGet($id){
-        return Card::whereId($id)->first();
+    public function cardFirstGet(){
+        return Cache::get("cardfirst");
     }
     
+    public function cardCache($id){
+        return Cache::put("cardfirst", Card::whereId($id)->first(), 60);
+    }
 }

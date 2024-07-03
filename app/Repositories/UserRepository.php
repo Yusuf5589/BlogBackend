@@ -4,11 +4,18 @@ namespace App\Repositories;
 
 use App\Models\Card;
 use App\Models\User;
+use Illuminate\Support\Facades\Cache;
 
 class UserRepository{
 
     public function all(){
-        return Card::get();
+        return Cache::get("card");
+    }
+
+
+    public function cachePut(){
+        $card = Card::get();
+        return Cache::put("card", $card, 10);
     }
 
     public function valError(){
